@@ -47,7 +47,7 @@ export function PriorArt() {
         <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_280px]">
           <Reveal>
             <div className="overflow-x-auto rounded-lg border border-line">
-              <table className="w-full min-w-[640px] border-collapse text-left">
+              <table className="w-full min-w-160 border-collapse text-left">
                 <caption className="sr-only">
                   Comparison of Gridwork with Helium, Hivemapper, Render, and DIMO
                 </caption>

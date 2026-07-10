@@ -10,7 +10,7 @@ const StreamCounter = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="h-[132px] rounded-lg border border-line bg-panel"
+        className="h-33 rounded-lg border border-line bg-panel"
         aria-hidden="true"
       />
     ),
@@ -124,7 +124,7 @@ export function Hero() {
                       </svg>
                     ) : null}
                   </div>
-                  <span className="pb-[22px] pt-1 text-sm text-ink-muted">
+                  <span className="pb-5.5 pt-1 text-sm text-ink-muted">
                     {stage.label}
                   </span>
                 </li>

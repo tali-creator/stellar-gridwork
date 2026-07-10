@@ -31,7 +31,7 @@ const variantStyles: Record<NonNullable<Props["variant"]>, string> = {
 };
 
 const base =
-  "inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md px-5 font-mono text-[13px] font-medium uppercase tracking-wide transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 font-mono text-[13px] font-medium uppercase tracking-wide transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2";
 
 export function Button({ variant = "primary", className = "", children, ...props }: Props) {
   const classes = `${base} ${variantStyles[variant]} ${className}`;
