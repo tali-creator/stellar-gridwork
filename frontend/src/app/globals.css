@@ -1,26 +1,120 @@
+
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Brand accent */
+  --color-signal: #ffa53c;
+
+  /* Surfaces */
+  --color-void: #0b0e14;
+  --color-panel: #141926;
+  --color-panel-raised: #1a2030;
+
+  /* Text */
+  --color-ink: #f1f3f8;
+  --color-ink-muted: #9aa3b8;
+  --color-ink-faint: #6b7488;
+
+  /* Borders */
+  --color-line: #232a3d;
+  --color-line-soft: #1a2030;
+
+  /* Background utilities */
+  --background-image-blueprint: linear-gradient(
+      rgba(35, 42, 61, 0.35) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(35, 42, 61, 0.35) 1px, transparent 1px);
+  --background-size-grid: 32px 32px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  * {
+    @apply border-line-soft;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-void text-ink antialiased font-sans;
+    font-feature-settings: "ss01" 1, "cv01" 1;
+  }
+
+  /* Visible, high-contrast focus ring for keyboard users. Never removed. */
+  :focus-visible {
+    outline: 2px solid theme("colors.signal");
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: theme("colors.signal");
+    color: theme("colors.void");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .bg-blueprint-grid {
+    background-image: theme("backgroundImage.blueprint");
+    background-size: theme("backgroundSize.grid");
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .reveal {
+    opacity: 1;
+  }
+
+  /* JS adds `.reveal-js` to <html> once hydrated; only then do we hide-before-animate */
+  .js-ready .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: none;
+  }
+
+  .reveal.is-visible,
+  .js-ready .reveal.is-visible {
+    animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .js-ready .reveal {
+      opacity: 1;
+      transform: none;
+      animation: none !important;
+    }
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

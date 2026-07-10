@@ -1,0 +1,81 @@
+name: Contracts
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "contracts/**"
+      - ".github/workflows/contracts.yml"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "contracts/**"
+      - ".github/workflows/contracts.yml"
+
+defaults:
+  run:
+    working-directory: contracts
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  ci:
+    name: Fmt, clippy, test & build WASM
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          # wasm32 target is needed for the Soroban contract build
+          targets: wasm32-unknown-unknown
+          components: rustfmt, clippy
+
+      - name: Cache Cargo registry & build artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: contracts
+
+      - name: Install Stellar CLI
+        run: |
+          cargo install --locked stellar-cli --features opt
+        env:
+          # Cache key includes the CLI version so it rebuilds on upgrades
+          CARGO_INCREMENTAL: "1"
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Clippy (native target for fast feedback)
+        run: cargo clippy --all-targets --all-features
+
+      - name: Run tests
+        run: cargo test --all-features
+
+      - name: Build contract WASM
+        run: stellar contract build
+
+      - name: Optimise WASM (stellar contract optimize)
+        run: |
+          for wasm in target/wasm32-unknown-unknown/release/*.wasm; do
+            stellar contract optimize --wasm "$wasm"
+          done
+
+      - name: Upload WASM artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contracts-wasm-${{ github.sha }}
+          # optimised files land alongside the originals with a .optimized.wasm suffix
+          path: |
+            contracts/target/wasm32-unknown-unknown/release/*.wasm
+          retention-days: ${{ github.ref == 'refs/heads/main' && 30 || 7 }}
+
+  # Testnet deployment will be added here once the contracts have real logic.
+  # See .github/workflows/contracts.yml for the deploy-testnet job template.

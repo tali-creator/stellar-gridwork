@@ -1,0 +1,70 @@
+/* @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"); */
+
+:root {
+  /* Surfaces */
+  --bg: #0b0e14;
+  --bg-elevated: #10141f;
+  --surface: #141926;
+  --surface-hover: #1a2030;
+  --border: #232a3d;
+  --border-strong: #2e3650;
+
+  /* Text */
+  --text-primary: #f1f3f8;
+  --text-secondary: #9aa3b8;
+  --text-muted: #6b7488;
+
+  /* Accents: violet = protocol/chain, green = money in motion */
+  --violet: #8b7cff;
+  --violet-dim: #5b4fcc;
+  --green: #34d8a0;
+  --green-dim: #1f8f6c;
+  --amber: #f5a623;
+  --red: #ff6b6b;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-mono,
+code,
+pre {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Visible focus state for every interactive element, including plain text links
+   that don't carry their own focus-visible utility classes. */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background-color: var(--violet);
+  color: var(--bg);
+}
+
+@keyframes gw-ticker {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-gw-ticker {
+  animation: gw-ticker 14s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-gw-ticker {
+    animation: none;
+  }
+}
